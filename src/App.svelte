@@ -1,8 +1,13 @@
 <script>
+	import Demo from './components/Demo.svelte';
+
 	let data = [];
 	const API_KEY = 'f3abb031';
 	const query = 'evangelion';
 
+	let contador = 1;
+
+	//Realizar la peticion a omdbapi
 	(async() => {
 		let resp = await fetch(`http://www.omdbapi.com/?s=${query}&apiKEY=${API_KEY}&plot=full`);
 		resp = await resp.json()
@@ -14,11 +19,55 @@
 			};
 			container.push(objMovie);
 			return container;
+			data = resp;
 		},[]);
 
 		console.log(resp)
 	})();
+
+	const incrementar = () => {
+		contador +=1;
+	}
+	const decrement = () => {
+		contador -=1;
+	}
+
+	$: esCinco= contador * 2;
+
+
+	const parametros = {
+		API_KEY,
+		query,
+		contador
+	}
+
+	const imprimir = ()=>{
+    console.log('hola')
+  }
+
 </script>
+
+<main>
+	<div class="loader-container">
+		<div class="loader">
+			{#each [1,2,3,4,5,6] as miDiv}
+				<div></div>				
+			{/each}
+		</div>
+
+		<!-- <button on:click={incrementar}>+</button>
+		<button on:click={decrement}>-</button>
+		{`${contador}, => ${esCinco}`} -->
+		{#if 1===1}
+		<Demo {parametros} on:click={imprimir}/>
+			{:else}
+			<div>es igual a dos</div>
+			<div>no es igual</div>
+		{/if}
+
+
+	</div>
+</main>
 
 
 <style>
@@ -123,17 +172,3 @@
 		}
 
 </style>
-
-
-<main>
-	<div class="loader-container">
-		<div class="loader">
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-		</div>
-	</div>
-</main>
